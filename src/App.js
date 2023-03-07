@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Web3 from "web3";
+import Web3 from "web3/dist/web3.min.js";
 import Admin from "./abis/Admin.json";
 import MetaMaskGuide from "./MetaMaskGuide";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
