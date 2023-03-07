@@ -81,7 +81,7 @@ export default function ChatBody({
   return loading ? (
     <Loading />
   ) : (
-    <Card height="100%" width="100%">
+    <Card width="100%">
       
       <div
             style={{

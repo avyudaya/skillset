@@ -1,7 +1,7 @@
 import Admin from "../abis/Admin.json";
 import { db } from "./firebase";
 
-export const messageAdmin = async (info, message) => {
+export const messageAdmin = async (info) => {
   const web3 = window.web3;
   const accounts = await web3.eth.getAccounts();
   const networkId = await web3.eth.net.getId();
@@ -18,7 +18,7 @@ export const messageAdmin = async (info, message) => {
       .collection("chatmessages")
       .add({
         info: { ...info, ethAddress: accounts[0] },
-        message: message,
+        message: "Organization Registration Request",
         sender: accounts[0],
         receiver: owner,
         timeStamp: new Date(),

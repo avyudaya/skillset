@@ -17,20 +17,17 @@ export default function Profile() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [role, setRole] = useState("0");
+  const [role, setRole] = useState(0);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [message, setMessage] = useState("");
 
   const isNameError = name === "";
   const isLocationError = location === "";
-  const isMessageError = message === "";
   const isDescriptionError = description === "";
-  const isRoleError = role === "0";
+  const isRoleError = role === 0;
 
   const handleNameChange = (e) => setName(e.target.value);
   const handleLocationChange = (e) => setLocation(e.target.value);
-  const handleMessageChange = (e) => setMessage(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleRoleChange = (e) => setRole(e.target.value);
 
@@ -43,7 +40,6 @@ export default function Profile() {
     if (
       isNameError ||
       isLocationError ||
-      isMessageError ||
       isDescriptionError ||
       isRoleError
     ) {
@@ -84,7 +80,7 @@ export default function Profile() {
       }
 
     } else {
-      await messageAdmin(info, message);
+      await messageAdmin(info);
       toast({
         title: "Message sent to admin.",
         status: "success",
@@ -94,9 +90,8 @@ export default function Profile() {
 
     setName("");
     setDescription("");
-    setRole("1");
+    setRole(0);
     setLocation("");
-    setMessage("");
     setSubmitted(false);
     setLoading(false);
   };
@@ -140,11 +135,12 @@ export default function Profile() {
           <FormLabel>Role</FormLabel>
           <Select
             placeholder="Select role"
-            defaultValue="1"
+            defaultValue={0}
+            value={role}
             onChange={handleRoleChange}
           >
-            <option value="1">Employee</option>
-            <option value="2">Organization</option>
+            <option value={1}>Employee</option>
+            <option value={2}>Organization</option>
           </Select>
           {submitted ? (
             isRoleError ? (
@@ -168,25 +164,6 @@ export default function Profile() {
           {submitted ? (
             isDescriptionError ? (
               <FormErrorMessage>Description Required</FormErrorMessage>
-            ) : (
-              <></>
-            )
-          ) : (
-            <></>
-          )}
-        </FormControl>
-
-        <FormControl isRequired isInvalid={isMessageError && submitted}>
-          <FormLabel mb={4}>Message</FormLabel>
-          <Textarea
-            value={message}
-            onChange={handleMessageChange}
-            placeholder="Provide a short message to admin about yourself."
-            size="sm"
-          />
-          {submitted ? (
-            isMessageError ? (
-              <FormErrorMessage>Message Required</FormErrorMessage>
             ) : (
               <></>
             )

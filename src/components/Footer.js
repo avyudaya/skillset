@@ -25,18 +25,13 @@ export default function Footer() {
         justify={"center"}
         align={"center"}
       >
-        <HStack mt={6}>
+        <HStack my={6}>
           <Image boxSize="40px" objectFit="cover" src={logo} alt="logo" />
           <Heading as="h3" size="lg">
             Skillset
           </Heading>
         </HStack>
-        <Stack direction={"row"} spacing={6}>
-          <Link href={"#"}>Home</Link>
-          <Link href={"#"}>About</Link>
-          <Link href={"#"}>Blog</Link>
-          <Link href={"#"}>Contact</Link>
-        </Stack>
+
       </Container>
 
       <Box
