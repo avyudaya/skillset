@@ -19,6 +19,6 @@ module.exports = function () {
   }
 
   getAdmin();
-  isEmployee('0x0d359f09cF38E48E20404CaB055bBE472cd77307');
-  createEmployee('0x0d359f09cF38E48E20404CaB055bBE472cd77307','Avyudaya Acharya', 'Balaju', 'react developer')
+  // isEmployee('0x0d359f09cF38E48E20404CaB055bBE472cd77307');
+  // createEmployee('0x0d359f09cF38E48E20404CaB055bBE472cd77307','Avyudaya Acharya', 'Balaju', 'react developer')
 };

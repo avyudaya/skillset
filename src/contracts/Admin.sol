@@ -58,7 +58,7 @@ contract Admin {
         return registeredEmployeesmap[_employee_address] != address(0x0);
     }
 
-    function isOrganizaiton(
+    function isOrganization(
         address _organization_address
     ) public view returns (bool) {
         return registeredOrganizationmap[_organization_address] != address(0x0);
