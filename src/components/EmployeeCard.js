@@ -59,11 +59,9 @@ import {
       skills.forEach((certi) => {
         newskills.push({
           name: certi[0],
-          overall_percentage: certi[1],
+          endorser_address: certi[1],
           experience: certi[2],
           endorsed: certi[3],
-          endorser_address: certi[4],
-          review: certi[5],
         });
         return;
       });
@@ -89,8 +87,7 @@ import {
           name: certi[0],
           organization: certi[1],
           score: certi[2],
-          endorsed: certi[3],
-          visible: certi[4],
+          endorsed: certi[3]
         });
         return;
       });
@@ -117,8 +114,7 @@ import {
           startdate: work[2],
           enddate: work[3],
           endorsed: work[4],
-          description: work[5],
-          visible: work[6],
+          description: work[5]
         });
         return;
       });

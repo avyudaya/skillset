@@ -59,6 +59,7 @@ export default function GetInfoModal({
         await admin.methods
           .createOrganization(ethAddress, name, location, description)
           .send({ from: accounts[0] });
+        // TODO delete the chat form firebase
         toast({
           title: "New organization registered succressfully!",
           status: "success",

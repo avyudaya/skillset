@@ -63,4 +63,45 @@ contract Admin {
     ) public view returns (bool) {
         return registeredOrganizationmap[_organization_address] != address(0x0);
     }
+
+    
+  function employeeCount() public view returns (uint256) {
+    return registeredEmployees.length;
+  }
+
+  function getEmployeeContractByAddress(address _employee)
+    public
+    view
+    returns (address)
+  {
+    return registeredEmployeesmap[_employee];
+  }
+
+  function getEmployeeContractByIndex(uint256 index)
+    public
+    view
+    returns (address)
+  {
+    return getEmployeeContractByAddress(registeredEmployees[index]);
+  }
+
+  function OrganizationCount() public view returns (uint256) {
+    return registeredOrganization.length;
+  }
+
+  function getOrganizationContractByAddress(address _organization)
+    public
+    view
+    returns (address)
+  {
+    return registeredOrganizationmap[_organization];
+  }
+
+  function getOrganizationContractByIndex(uint256 index)
+    public
+    view
+    returns (address)
+  {
+    return getOrganizationContractByAddress(registeredOrganization[index]);
+  }
 }

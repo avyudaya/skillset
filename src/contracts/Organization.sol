@@ -21,4 +21,17 @@ contract Organization {
     description = _description;
     location = _location;
   }
+
+  function getOrganizationInfo()
+    public
+    view
+    returns (
+      string memory,
+      address,
+      string memory,
+      string memory
+    )
+  {
+    return (name, organization_address, description, location);
+  }
 }
