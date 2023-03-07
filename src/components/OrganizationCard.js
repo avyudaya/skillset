@@ -10,7 +10,7 @@ import {
     StackDivider,
     Text,
   } from "@chakra-ui/react";
-
+import Loading from "./Loading";
 export default function OrganizationCard({address}){
 
     const [orgData, setOrgData] = useState([]);
@@ -32,6 +32,18 @@ export default function OrganizationCard({address}){
             description: organizationData[3],
         };
         setOrgData(newOrgData);
+
+        const employeeCount = await OrganizationContract.methods.totalEmployees().call();
+
+        const allEmployeesInOrg = await Promise.all(
+            Array(parseInt(employeeCount))
+                .fill()
+                .map((ele, index) =>
+                    OrganizationContract.methods.getEmployeeByIndex(index).call()
+                )
+        );
+
+        setAllEmployees(allEmployeesInOrg);
     }
 
     useEffect(() => {
@@ -60,6 +72,9 @@ export default function OrganizationCard({address}){
             <Heading size="xs">Location: {orgData?.location}</Heading>
             <Text pt="2" fontSize="sm">
               {orgData?.description}
+            </Text>
+            <Text pt="3" fontSize="md">
+              Number of Employees: {allEmployees.length > 0? allEmployees: 0}
             </Text>
           </Box>
         </Stack>

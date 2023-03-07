@@ -34,4 +34,19 @@ contract Organization {
   {
     return (name, organization_address, description, location);
   }
+
+  address[] allEmployees;
+
+  function addEmployees(address employee_address) public {
+    require(msg.sender == organization_address);
+    allEmployees.push(employee_address);
+  }
+
+  function totalEmployees() public view returns (uint256) {
+    return allEmployees.length;
+  }
+
+  function getEmployeeByIndex(uint256 index) public view returns (address) {
+    return allEmployees[index];
+  }
 }
