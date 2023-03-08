@@ -67,10 +67,9 @@ import {
         <Heading size="md" my="2">
           <LinkOverlay href={'/employee/'+employeeData.ethAddress}>{employeeData.name}: Employee</LinkOverlay>
         </Heading>
-            <Text fontSize={"sm"} fontWeight={"300"}>
+            <Text fontSize={"sm"} fontWeight={"300"} mb={2}>
               {employeeData?.location}
             </Text>
-        <Text color="gray.400" mb={2}>{employeeData.description}</Text>
         <Divider/>
       </LinkBox>
     );

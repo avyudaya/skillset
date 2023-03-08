@@ -17,7 +17,9 @@ import { useEffect, useState } from "react";
 import Admin from "../abis/Admin.json";
 import Employee from "../abis/Employee.json";
 import _ from "lodash";
+import DatalistInput from "react-datalist-input";
 var source = [];
+
 
 export default function AddSkillModal({ initialRef, isOpen, onClose }) {
   const [name, setName] = useState("");
@@ -202,7 +204,7 @@ export default function AddSkillModal({ initialRef, isOpen, onClose }) {
               list="orgsList"
               autoComplete="off"
             />
-            <datalist id="orgsList">
+            <datalist id="orgsList" className='orgsList'> 
               {results.map((org, index) => (
                 <option key={index} value={org.description}>
                   {org.title}

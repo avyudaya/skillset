@@ -44,7 +44,6 @@ export default function ChatBody({
       .onSnapshot((snapshot) =>
         setChats(snapshot.docs.map((doc) => doc.data()))
       );
-    console.log(chats)
     setLoading(false);
   };
 

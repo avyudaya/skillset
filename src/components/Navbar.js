@@ -165,10 +165,22 @@ export default function Navbar() {
               onClick={isOpen ? onClose : onOpen}
             />
             <HStack>
-              <Image boxSize="40px" objectFit="cover" src={logo} alt="logo" />
-              <Heading as="h3" size="lg">
-                Skillset
-              </Heading>
+              <NavLink
+                name={
+                  <HStack>
+                    <Image
+                      boxSize="40px"
+                      objectFit="cover"
+                      src={logo}
+                      alt="logo"
+                    />
+                    <Heading as="h3" size="lg">
+                      Skillset
+                    </Heading>
+                  </HStack>
+                }
+                href="/"
+              ></NavLink>
               <Searchbar />
             </HStack>
           </Flex>

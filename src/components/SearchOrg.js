@@ -68,11 +68,9 @@ import {
         <Heading size="md" my="2">
           <LinkOverlay href={'/organization/'+orgData.ethAddress}>{orgData.name}: Organization</LinkOverlay>
         </Heading>
-            <Text fontSize={"sm"} fontWeight={"300"}>
+            <Text fontSize={"sm"} fontWeight={"300"} mb={2}>
               {orgData?.location}
             </Text>
-          
-        <Text color="gray.400" mb={2}>{orgData.description}</Text>
         <Divider/>
       </LinkBox>
     );

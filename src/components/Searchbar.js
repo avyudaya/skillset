@@ -106,7 +106,6 @@ export default function Searchbar() {
 
     setLoading(false);
     setResults(_.filter(source, isMatch));
-    console.log(results);
   };
 
   const handelSearchClose = (e) => {
@@ -120,14 +119,6 @@ export default function Searchbar() {
     const func = async () => {
       await loadBlockChainData();
     };
-
-    const handelSearchClose = (e) => {
-      setLoading(false);
-      setValue("");
-      setResults([]);
-      onClose();
-    };
-
     func();
   }, []);
 
@@ -156,7 +147,7 @@ export default function Searchbar() {
                 value={value}
               />
             </FormControl>
-            {results.length > 0 && results.map((emp, index) => <div key={index}>{emp.description}</div>)}
+            {results.length > 0 && results.map((emp, index) => <Box key={index}>{emp.description}</Box>)}
           </ModalBody>
         </ModalContent>
       </Modal>
