@@ -56,6 +56,67 @@ export const messageAdmin = async (info) => {
 };
 
 
+export const reqSkillEndorsementFunc = async (skill) => {
+  const { organization, name, experience } = skill;
+  const web3 = window.web3;
+  const accounts = await web3.eth.getAccounts();
+  var key;
+  if (organization < accounts[0]) {
+    key = organization + "#" + accounts[0];
+  } else {
+    key = accounts[0] + "#" + organization;
+  }
+  try {
+    await db
+      .collection("chats")
+      .doc(key)
+      .collection("chatmessages")
+      .add({
+        info: {
+          req: "Skill Endorsement Request",
+          name,
+          organization,
+          experience,
+          ethAddress: accounts[0],
+        },
+        message: "Please endorse!!",
+        sender: accounts[0],
+        receiver: organization,
+        timeStamp: new Date(),
+      });
+    const doc = await db
+      .collection("users")
+      .doc(accounts[0])
+      .collection("activechats")
+      .doc(organization)
+      .get();
+    if (!doc.exists) {
+      await db
+        .collection("users")
+        .doc(accounts[0])
+        .collection("activechats")
+        .doc(organization)
+        .set({
+          name: "Organization",
+          ethAddress: organization,
+        });
+      await db
+        .collection("users")
+        .doc(organization)
+        .collection("activechats")
+        .doc(accounts[0])
+        .set({
+          name: "Employee",
+          ethAddress: accounts[0],
+        });
+    }
+    // toast.success("Endorsement request sent!!");
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 export const reqWorkexpEndorsementFunc = async (workexp) => {
   const { organization, role, startdate, enddate, description } = workexp;
   const web3 = window.web3;

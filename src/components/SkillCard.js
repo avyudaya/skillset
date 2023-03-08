@@ -16,11 +16,32 @@ import {
     Button,
     CardFooter,
     HStack,
+    useToast,
   } from "@chakra-ui/react";
   import { CheckCircleIcon } from "@chakra-ui/icons";
   import { Link } from "react-router-dom";
+import { reqSkillEndorsementFunc } from "../firebase/api";
+
+import { useState } from "react";
   export default function SkillCard({ skill, reqEndorsement }) {
+    const [submitted, setSubmitted] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const toast = useToast()
+
+    const requestSkillEndorsement = async (e) => {
+      setSubmitted(true);
+      onClose();
+      var x = reqSkillEndorsementFunc(skill, toast);
+      if(x){
+        toast({
+          title: "Endorsement request sent!",
+          status: "success",
+          isClosable: true,
+        });
+        setSubmitted(false);
+      }
+      onClose();
+    };
   
     return (
       <>
@@ -74,7 +95,7 @@ import {
   
             {reqEndorsement && (
               <ModalFooter>
-                <Button colorScheme="pink" mr={3}>
+                <Button colorScheme="pink" mr={3} onClick={requestSkillEndorsement} isLoading={submitted}>
                   Request Endorsement
                 </Button>
                 <Button variant="ghost" onClick={onClose}>

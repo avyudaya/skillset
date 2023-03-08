@@ -10,7 +10,7 @@ import {
   Button,
   ModalHeader,
   useToast,
-  Link
+  Link,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Admin from "../abis/Admin.json";
@@ -34,7 +34,7 @@ export default function GetInfoModal({
     if (!name || !location || !description || !ethAddress) {
       toast({
         title: "Please fill all the fields!",
-      status: "error",
+        status: "error",
         isClosable: true,
       });
       return;
@@ -114,7 +114,9 @@ export default function GetInfoModal({
             ?.endorseWorkExp()
             .send({ from: accounts[0] });
         } else if (section === 4) {
-          await EmployeeContract?.methods?.endorseSkill().send({ from: accounts[0] });
+          await EmployeeContract?.methods
+            ?.endorseSkill(info.name)
+            .send({ from: accounts[0] });
         }
 
         toast({
@@ -138,6 +140,14 @@ export default function GetInfoModal({
         <ModalCloseButton />
 
         <ModalBody>
+          {info?.req === "Skill Endorsement Request" && (
+            <>
+              <Text>Name: {info?.name}</Text>
+              <Text>Organization: {info?.organization}</Text>
+              <Text>Description: {info?.description}</Text>
+              <Text>Experience: {info?.experience}</Text>
+            </>
+          )}
           {info?.req === "Certification Endorsement Request" && (
             <>
               <Text>Name: {info?.name}</Text>
@@ -165,7 +175,7 @@ export default function GetInfoModal({
         </ModalBody>
 
         <ModalFooter>
-          {org  && (
+          {org && (
             <Button
               colorScheme="pink"
               bgGradient="linear(to-r, pink.400, pink.500, pink.600)"
@@ -184,8 +194,7 @@ export default function GetInfoModal({
         </ModalFooter>
       </ModalContent>
     </Modal>
-  ) : 
-  info?.ethAddress ? (
+  ) : info?.ethAddress ? (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
@@ -194,14 +203,20 @@ export default function GetInfoModal({
 
         <ModalBody>
           <Text>Name: {info?.name}</Text>
-          <Text color="gray.400" fontWeight={300}>{info?.ethAddress}</Text>
-          <Text>Location: {info?.location}</Text>
-          <Text>Description: {info?.description}</Text>
-          <Text>
-            Role requested: Organization
+          <Text color="gray.400" fontWeight={300}>
+            {info?.ethAddress}
           </Text>
           <Text>Location: {info?.location}</Text>
-          <Link isExternal color='teal.500' href={"https://gateway.pinata.cloud/ipfs/"+info?.fileCID}>Verification Document <ExternalLinkIcon mx="2px"/></Link>
+          <Text>Description: {info?.description}</Text>
+          <Text>Role requested: Organization</Text>
+          <Text>Location: {info?.location}</Text>
+          <Link
+            isExternal
+            color="teal.500"
+            href={"https://gateway.pinata.cloud/ipfs/" + info?.fileCID}
+          >
+            Verification Document <ExternalLinkIcon mx="2px" />
+          </Link>
         </ModalBody>
 
         <ModalFooter>
@@ -224,5 +239,7 @@ export default function GetInfoModal({
         </ModalFooter>
       </ModalContent>
     </Modal>
-  ): (<></>);
+  ) : (
+    <></>
+  );
 }

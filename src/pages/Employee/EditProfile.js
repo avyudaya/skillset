@@ -253,7 +253,7 @@ import {
                   spacing={10}
                 >
                   {skills.map((skill, index) => (
-                    <SkillCard skill={skill} key={index} reqEndorsement={false}/>
+                    <SkillCard skill={skill} key={index} reqEndorsement={!skill?.endorsed}/>
                   ))}
                 </SimpleGrid>
               ) : (
