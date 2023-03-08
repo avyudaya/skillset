@@ -28,8 +28,8 @@ export default function OrganizationCard({address}){
         const newOrgData = {
             ethAddress: organizationData[1],
             name: organizationData[0],
-            location: organizationData[2],
-            description: organizationData[3],
+            location: organizationData[3],
+            description: organizationData[2],
         };
         setOrgData(newOrgData);
 

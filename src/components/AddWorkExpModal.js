@@ -27,7 +27,7 @@ import {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [invEth, setInvEth] = useState(false);
-  const [results, setResults] = useState([]);
+    const [results, setResults] = useState([]);
 
   
     const isRoleError = role === "";
@@ -84,6 +84,17 @@ import {
         setLoading(false);
         return;
       }
+
+      if(startDate > endDate) {
+        toast({
+          title: "Start Date can't be earlier than End Date.",
+          status: "error",
+          isClosable: true,
+        });
+        setLoading(false);
+          setSubmitted(false);
+        return;
+      }
   
       const web3 = window.web3;
       const accounts = await web3.eth.getAccounts();
@@ -107,6 +118,8 @@ import {
           setSubmitted(false);
           return;
         }
+
+        
   
         try {
           await EmployeeContract.methods

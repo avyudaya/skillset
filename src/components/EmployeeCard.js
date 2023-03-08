@@ -36,10 +36,8 @@ import {
       const newEmployedata = {
         ethAddress: employeedata[0],
         name: employeedata[1],
-        location: employeedata[2],
-        description: employeedata[3],
-        overallEndorsement: employeedata[4],
-        endorsecount: employeedata[5],
+        location: employeedata[3],
+        description: employeedata[2],
       };
       setEmployeeData(newEmployedata);
       setLoading(false);

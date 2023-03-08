@@ -61,7 +61,7 @@ export default function Searchbar() {
         allEmp.forEach((emp, index) => {
           source.push({
             title: empName,
-            description: <SearchEmp emp={emp} key={index}/>
+            description: <SearchEmp emp={emp} key={index} />,
           });
         });
       });
@@ -78,9 +78,9 @@ export default function Searchbar() {
         const org = await admin?.methods?.getOrganizationByName(orgName).call();
         source.push({
           tittle: orgName,
-          description: <SearchOrg org={org} key={index}/>
-        })
-      })
+          description: <SearchOrg org={org} key={index} />,
+        });
+      });
       //search endosed skills
     } else {
       toast({
@@ -110,11 +110,11 @@ export default function Searchbar() {
 
   const handelSearchClose = (e) => {
     setLoading(false);
-    setValue('')
-    setResults([])
-    onClose()
-  }
-  
+    setValue("");
+    setResults([]);
+    onClose();
+  };
+
   useEffect(() => {
     const func = async () => {
       await loadBlockChainData();
@@ -145,9 +145,20 @@ export default function Searchbar() {
                 placeholder="Search for employees or organizations or skills"
                 onChange={handleSearchChange}
                 value={value}
+                autoComplete="off"
               />
             </FormControl>
-            {results.length > 0 && results.map((emp, index) => <Box key={index}>{emp.description}</Box>)}
+            {results.length > 0 ? (
+              results.map((emp, index) => (
+                <Box key={index}>{emp.description}</Box>
+              ))
+            ) : value.length > 0 ? (
+              <Box p={6}>
+                <Text textAlign="center">Nothing Found. Try something different.</Text>
+              </Box>
+            ) : (
+              <></>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

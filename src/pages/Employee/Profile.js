@@ -83,7 +83,7 @@ export default function EmployeePage() {
       Array(parseInt(skillCount))
         .fill()
         .map((ele, index) =>
-          EmployeeContract?.methods?.getSkillByIndex(index).call()
+          EmployeeContract?.methods?.getskillByIndex(index).call()
         )
     );
 
@@ -278,7 +278,7 @@ export default function EmployeePage() {
               Work Experiences
             </Text>
 
-            {certifications.length > 0 ? (
+            {workExps.length > 0 ? (
               <SimpleGrid
                 columns={{ base: 1, md: 2, lg: 3, xl: 4 }}
                 spacing={10}
@@ -288,7 +288,7 @@ export default function EmployeePage() {
                 ))}
               </SimpleGrid>
             ) : (
-              <Text>No Certifications added.</Text>
+              <Text>No Work Experiences added.</Text>
             )}
           </Box>
 

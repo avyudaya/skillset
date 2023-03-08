@@ -201,7 +201,7 @@ export default function GetInfoModal({
             Role requested: Organization
           </Text>
           <Text>Location: {info?.location}</Text>
-          <Link isExternal href={"https://gateway.pinata.cloud/ipfs/"+info?.fileCID}>Verification Document <ExternalLinkIcon mx="2px"/></Link>
+          <Link isExternal color='teal.500' href={"https://gateway.pinata.cloud/ipfs/"+info?.fileCID}>Verification Document <ExternalLinkIcon mx="2px"/></Link>
         </ModalBody>
 
         <ModalFooter>

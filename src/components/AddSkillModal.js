@@ -102,7 +102,7 @@ export default function AddSkillModal({ initialRef, isOpen, onClose }) {
       }
 
       try {
-        await EmployeeContract.methods.addSkill(name, orgAddress, exp).send({
+        await EmployeeContract.methods.addskill(name, orgAddress, exp).send({
           from: accounts[0],
         });
         toast({
