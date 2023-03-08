@@ -9,7 +9,7 @@ import EmployeeCard from "../../components/EmployeeCard";
 export default function Profile() {
   const [orgContractAddress, setOrgContractAddress] = useState("");
   const [employees, setEmployees] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const toast = useToast();
 

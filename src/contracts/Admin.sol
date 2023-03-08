@@ -12,7 +12,7 @@ contract Admin {
     address[] registeredOrganization;
 
     // for search by name
-    mapping(string => address) empsmap;
+    mapping(string => address[]) empsmap;
     mapping(string => address) orgsmap;
     string[] emps;
     string[] orgs;
@@ -42,7 +42,10 @@ contract Admin {
         registeredEmployeesmap[_eth_address] = address(emp);
         registeredEmployees.push(_eth_address);
         // adding to search array
-        empsmap[_name] = _eth_address;
+        if (empsmap[_name].length == 0) {
+            emps.push(_name);
+        }
+        empsmap[_name].push(_eth_address);
     }
 
     function createOrganization(
@@ -61,6 +64,9 @@ contract Admin {
         registeredOrganizationmap[_eth_address] = address(org);
         registeredOrganization.push(_eth_address);
         // adding to search array
+        if (orgsmap[_name] == address(0x0)) {
+            orgs.push(_name);
+        }
         orgsmap[_name] = _eth_address;
     }
 
@@ -108,12 +114,35 @@ contract Admin {
 
     // search emps or orgs by name
 
-    function getOrganizationByName(string memory _name) public view returns (address) {
-      return orgsmap[_name];
+    function getOrganizationByName(
+        string memory _name
+    ) public view returns (address) {
+        return orgsmap[_name];
     }
 
-    function getEmployeesByName(string memory _name) public view returns (address) {
-      return empsmap[_name];
+    function getEmployeesByName(
+        string memory _name,
+        uint256 _emp_index
+    ) public view returns (address) {
+        return empsmap[_name][_emp_index];
     }
 
+    function getTotalEmployeeInEmpsByName(string memory _name)public
+    view
+    returns (uint256)
+  {
+    return empsmap[_name].length;
+  }
+
+    function getEmployeeNameByIndex(
+        uint256 _emp_index
+    ) public view returns (string memory) {
+        return emps[_emp_index];
+    }
+
+    function getOrganizationNameByIndex(
+        uint256 _org_index
+    ) public view returns (string memory) {
+        return orgs[_org_index];
+    }
 }

@@ -199,8 +199,7 @@ export default function GetInfoModal({
           <Text>Location: {info?.location}</Text>
           <Text>Description: {info?.description}</Text>
           <Text>
-            Role requested:{" "}
-            {info?.role === "1" ? "Employee" : "Organization Endorser"}
+            Role requested: Organization
           </Text>
           <Text>Location: {info?.location}</Text>
         </ModalBody>

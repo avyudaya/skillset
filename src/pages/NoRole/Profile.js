@@ -135,7 +135,6 @@ export default function Profile() {
           <FormLabel>Role</FormLabel>
           <Select
             placeholder="Select role"
-            defaultValue={0}
             value={role}
             onChange={handleRoleChange}
           >
