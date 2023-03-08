@@ -13,28 +13,67 @@ import {
 import { useState } from "react";
 import { messageAdmin } from "../../firebase/api";
 import Admin from "../../abis/Admin.json";
+import axios from "axios";
+const JWT = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1NDNiZWQ5Ni1hZTBmLTRlNjEtOTA2ZS00OGQxNmM3YTE0N2QiLCJlbWFpbCI6ImF2eXVkYXlhMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNTY5ZjNlM2ZjY2RkNjhkNzgyMTAiLCJzY29wZWRLZXlTZWNyZXQiOiIxOTgyYzM3NTdjNDhjOGY0MzFkNjg0ZDZkMTAzMjA3MGNiMWU3ZDkzNjI3MjBhODQ3M2QzMjY3YWQ3ZmI3YTc2IiwiaWF0IjoxNjc4MjY1OTMwfQ.hvE04O_JTWzQnleO7_JE5rl5Kjlt0--xzn64Jr7NrPs`;
 export default function Profile() {
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [role, setRole] = useState(0);
+  const [role, setRole] = useState("0");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [selectedFile, setSelectedFile] = useState();
 
   const isNameError = name === "";
   const isLocationError = location === "";
   const isDescriptionError = description === "";
-  const isRoleError = role === 0;
+  const isRoleError = role === "0";
+  const isFileError = selectedFile === undefined;
 
   const handleNameChange = (e) => setName(e.target.value);
   const handleLocationChange = (e) => setLocation(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleRoleChange = (e) => {
-    if(e.target.value=== '')
-      setRole(0)
-    else
-      setRole(e.target.value);
-  }
+    if (e.target.value === "") setRole('1');
+    else setRole(e.target.value);
+  };
+
+  const changeHandler = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleSubmission = async () => {
+    const formData = new FormData();
+
+    formData.append("file", selectedFile);
+
+    const metadata = JSON.stringify({
+      name: "File name",
+    });
+    formData.append("pinataMetadata", metadata);
+
+    const options = JSON.stringify({
+      cidVersion: 0,
+    });
+    formData.append("pinataOptions", options);
+
+    try {
+      const res = await axios.post(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        formData,
+        {
+          maxBodyLength: "Infinity",
+          headers: {
+            "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+            Authorization: JWT,
+          },
+        }
+      );
+      return res.data?.IpfsHash;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const toast = useToast();
 
@@ -46,17 +85,12 @@ export default function Profile() {
       isNameError ||
       isLocationError ||
       isDescriptionError ||
-      isRoleError
+      isRoleError ||
+      (isFileError && role === '2')
     ) {
       setLoading(false);
       return;
     }
-
-    const info = {
-      name: name,
-      description: description,
-      location: location,
-    };
 
     if (role === "1") {
       const web3 = window.web3;
@@ -64,16 +98,13 @@ export default function Profile() {
       const networkId = await web3.eth.net.getId();
       const AdminData = await Admin.networks[networkId];
 
-      if(AdminData){
+      if (AdminData) {
         const admin = await new web3.eth.Contract(Admin.abi, AdminData.address);
-        
+
         try {
-          await admin.methods.createEmployee(
-            accounts[0],
-            name,
-            location,
-            description
-          ).send({ from: accounts[0] });
+          await admin.methods
+            .createEmployee(accounts[0], name, location, description)
+            .send({ from: accounts[0] });
           window.location.reload(true);
         } catch (err) {
           toast({
@@ -83,8 +114,14 @@ export default function Profile() {
           });
         }
       }
-
     } else {
+      const fileCID = await handleSubmission();
+      const info = {
+        name: name,
+        description: description,
+        location: location,
+        fileCID: fileCID
+      };
       await messageAdmin(info);
       toast({
         title: "Message sent to admin.",
@@ -143,8 +180,8 @@ export default function Profile() {
             value={role}
             onChange={handleRoleChange}
           >
-            <option value={1}>Employee</option>
-            <option value={2}>Organization</option>
+            <option value="1">Employee</option>
+            <option value="2">Organization</option>
           </Select>
           {submitted ? (
             isRoleError ? (
@@ -175,6 +212,14 @@ export default function Profile() {
             <></>
           )}
         </FormControl>
+
+        {role === "2" && <FormControl isRequired isInvalid={isFileError && submitted}>
+          <FormLabel mb={4}>Validation Document</FormLabel>
+          <Input type="file" onChange={changeHandler} />
+          {submitted && isFileError && (
+              <FormErrorMessage>File Required</FormErrorMessage>
+            )}
+        </FormControl>}
       </VStack>
       <Button
         colorScheme="pink"

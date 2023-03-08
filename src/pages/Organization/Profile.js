@@ -24,7 +24,6 @@ export default function Profile() {
       const orgContractAddress = await admin?.methods
         ?.getOrganizationContractByAddress(accounts[0])
         .call();
-      console.log(orgContractAddress);
 
       const orgContract = await new web3.eth.Contract(
         Organization.abi,

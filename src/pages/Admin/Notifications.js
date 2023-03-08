@@ -30,7 +30,6 @@ export default function Notifications() {
       .onSnapshot((snapshot) =>
         setConversations(snapshot.docs.map((doc) => doc.data()))
       );
-    console.log(conversations);
   };
 
   const genImg = (name) => {

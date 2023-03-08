@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Text,
   Modal,
@@ -9,6 +10,7 @@ import {
   Button,
   ModalHeader,
   useToast,
+  Link
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Admin from "../abis/Admin.json";
@@ -25,8 +27,6 @@ export default function GetInfoModal({
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  console.log(info)
 
   const createUser = async (e) => {
     e.preventDefault();
@@ -96,7 +96,6 @@ export default function GetInfoModal({
         const employeeContractAddress = await admin.methods
           .getEmployeeContractByAddress(info?.ethAddress)
           .call();
-        console.log(employeeContractAddress);
         const EmployeeContract = await new web3.eth.Contract(
           Employee.abi,
           employeeContractAddress
@@ -202,6 +201,7 @@ export default function GetInfoModal({
             Role requested: Organization
           </Text>
           <Text>Location: {info?.location}</Text>
+          <Link isExternal href={"https://gateway.pinata.cloud/ipfs/"+info?.fileCID}>Verification Document <ExternalLinkIcon mx="2px"/></Link>
         </ModalBody>
 
         <ModalFooter>
