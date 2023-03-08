@@ -84,10 +84,13 @@ export default function Notifications() {
                     <Image
                       objectFit="cover"
                       width={20}
+                      height={20}
+                      minHeight={20}
+                      minWidth={20}
                       src={genImg(data.name)}
                       alt="Caffe Latte"
                     />
-                    <Stack>
+                    <Stack textAlign="left">
                       <CardBody>
                         <Heading size="md">{data.name}</Heading>
                       </CardBody>
