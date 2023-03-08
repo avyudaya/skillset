@@ -212,7 +212,7 @@ import {
                 (isOrgAddressError && submitted) || (invEth && !submitted)
               }
             >
-              <FormLabel>Organization</FormLabel>
+              <FormLabel>Organization Address</FormLabel>
               <Input
               placeholder="Organization from which you got the work Experience"
               value={orgAddress}

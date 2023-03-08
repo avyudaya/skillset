@@ -29,7 +29,12 @@ export default function Profile() {
   const handleNameChange = (e) => setName(e.target.value);
   const handleLocationChange = (e) => setLocation(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
-  const handleRoleChange = (e) => setRole(e.target.value);
+  const handleRoleChange = (e) => {
+    if(e.target.value=== '')
+      setRole(0)
+    else
+      setRole(e.target.value);
+  }
 
   const toast = useToast();
 
