@@ -17,7 +17,7 @@ import {
   import Admin from "../abis/Admin.json";
   import Employee from "../abis/Employee.json";
   import _ from "lodash";
-  const source = []
+  var source = []
   export default function AddEducationModal({ initialRef, isOpen, onClose }) {
 
     const [instAddress, setInstAddress] = useState("");
@@ -143,6 +143,7 @@ import {
       setDescription("");
       setLoading(false);
       setSubmitted(false);
+      source.length = 0;
       onClose();
     };
 

@@ -18,8 +18,6 @@ import Admin from "../abis/Admin.json";
 import Employee from "../abis/Employee.json";
 import _ from "lodash";
 var source = [];
-
-
 export default function AddSkillModal({ initialRef, isOpen, onClose }) {
   const [name, setName] = useState("");
   const [orgAddress, setorgAddress] = useState("");
@@ -137,6 +135,7 @@ export default function AddSkillModal({ initialRef, isOpen, onClose }) {
     setExp("");
     setLoading(false);
     setSubmitted(false);
+    source.length = 0;
     onClose();
   };
 

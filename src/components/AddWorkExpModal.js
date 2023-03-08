@@ -17,7 +17,7 @@ import {
   import Admin from "../abis/Admin.json";
   import Employee from "../abis/Employee.json";
   import _ from "lodash";
-  const source = []
+  var source = []
   export default function AddWorkExpModal({ initialRef, isOpen, onClose }) {
     const [role, setRole] = useState("");
     const [orgAddress, setorgAddress] = useState("");
@@ -147,6 +147,7 @@ import {
       setDescription("");
       setLoading(false);
       setSubmitted(false);
+      source.length = 0;
       onClose();
     };
 

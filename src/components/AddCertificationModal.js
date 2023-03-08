@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import Admin from "../abis/Admin.json";
 import Employee from "../abis/Employee.json";
 import _ from "lodash";
-const source = [];
+var source = [];
 export default function AddCertificationModal({ initialRef, isOpen, onClose }) {
   const [name, setName] = useState("");
   const [orgAddress, setorgAddress] = useState("");
@@ -131,6 +131,7 @@ export default function AddCertificationModal({ initialRef, isOpen, onClose }) {
     setScore("");
     setLoading(false);
     setSubmitted(false);
+    source.length = 0;
     onClose();
   };
 
@@ -163,6 +164,7 @@ export default function AddCertificationModal({ initialRef, isOpen, onClose }) {
   };
 
   useEffect(() => {
+    console.log('fire')
     const func = async () => {
       await loadBlockChainData();
     };
