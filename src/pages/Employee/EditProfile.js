@@ -147,8 +147,9 @@ import {
           organization: work[1],
           startdate: work[2],
           enddate: work[3],
-          endorsed: work[4],
-          description: work[5]
+          current: work[4],
+          endorsed: work[5],
+          description: work[6]
         });
         return;
       });

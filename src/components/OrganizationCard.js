@@ -74,7 +74,7 @@ export default function OrganizationCard({address}){
               {orgData?.description}
             </Text>
             <Text pt="3" fontSize="md">
-              Number of Employees: {allEmployees.length > 0? allEmployees: 0}
+              Number of Employees: {allEmployees.length > 0? allEmployees.length: 0}
             </Text>
           </Box>
         </Stack>

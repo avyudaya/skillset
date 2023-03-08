@@ -8,6 +8,7 @@ import {
     StackDivider,
     Text,
     Badge,
+    Link
   } from "@chakra-ui/react";
   import { useState, useEffect } from "react";
   import Employee from "../abis/Employee.json";
@@ -158,6 +159,7 @@ import {
       <Loading />
     ) : (
       <Card width={{ base: "sm", md: "2xl", sm: "md", lg: "3xl" }}>
+        <Link href={'/employee/'+employeeData?.ethAddress}>
         <CardHeader pb={0}>
           <Heading size="md">
             {employeeData?.name}
@@ -166,6 +168,7 @@ import {
           {employeeData?.ethAddress}  
           </Text>
         </CardHeader>
+        </Link>
   
         <CardBody>
           <Stack divider={<StackDivider />} spacing="4">

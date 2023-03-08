@@ -15,11 +15,13 @@ import {
 import { useState } from "react";
 import Admin from "../abis/Admin.json";
 import Employee from "../abis/Employee.json";
+import Organization from "../abis/Organization.json";
 
 export default function GetInfoModal({
   isOpen,
   onClose,
   info,
+  sender,
   admin,
   org,
   isEndorsementReq,
@@ -110,6 +112,18 @@ export default function GetInfoModal({
             ?.endorseCertification(info.name)
             .send({ from: accounts[0] });
         } else if (section === 3) {
+          if (info?.current === true) {
+            // add it to the organization companies
+            const orgContractAddress = await admin?.methods
+              ?.getOrganizationContractByAddress(info.organization)
+              .call();
+            const orgContract = await new web3.eth.Contract(
+              Organization.abi,
+              orgContractAddress
+            );
+            await orgContract?.methods?.addEmployees(sender).send({from: accounts[0]});
+            console.log("add to company");
+          }
           await EmployeeContract?.methods
             ?.endorseWorkExp()
             .send({ from: accounts[0] });
@@ -169,7 +183,11 @@ export default function GetInfoModal({
               <Text>Organization: {info?.organization}</Text>
               <Text>Description: {info?.description}</Text>
               <Text>Start Date: {info?.startdate}</Text>
-              <Text>End Date: {info?.enddate}</Text>
+              {info?.current === true ? (
+                <Text>Current</Text>
+              ) : (
+                <Text>End Date: {info?.enddate}</Text>
+              )}
             </>
           )}
         </ModalBody>

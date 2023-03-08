@@ -20,7 +20,6 @@ export default function ChatBody({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [account, setAccount] = useState("");
-  const [infoModal, setInfoModal] = useState(false);
 
   const handleChange = (e) => setMessage(e.target.value);
 

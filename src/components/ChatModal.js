@@ -42,6 +42,7 @@ export default function ChatModal({chat, admin, isEndorsementReq, org, account})
           isOpen={isOpen}
           onClose={onClose}
           info={chat.info}
+          sender={chat.sender}
           admin={admin}
           isEndorsementReq={isEndorsementReq}
           org={org}

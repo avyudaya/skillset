@@ -12,7 +12,6 @@ import {
   StackDivider,
   useToast,
   Divider,
-
 } from "@chakra-ui/react";
 import SkillCard from "../../components/SkillCard";
 import CertificationCard from "../../components/CertificationCard";
@@ -76,7 +75,6 @@ export default function EmployeePage() {
     setLoading(false);
   };
 
-
   const getSkills = async (EmployeeContract) => {
     const skillCount = await EmployeeContract?.methods?.getSkillCount().call();
     const skills = await Promise.all(
@@ -124,7 +122,7 @@ export default function EmployeePage() {
       return;
     });
     setCertifications(newcertifications);
-  }
+  };
 
   const getWorkExps = async (EmployeeContract) => {
     const workExpCount = await EmployeeContract?.methods
@@ -145,14 +143,15 @@ export default function EmployeePage() {
         organization: work[1],
         startdate: work[2],
         enddate: work[3],
-        endorsed: work[4],
-        description: work[5]
+        current: work[4],
+        endorsed: work[5],
+        description: work[6],
       });
       return;
     });
 
-    setworkExps(newworkExps)
-  }
+    setworkExps(newworkExps);
+  };
 
   const getEducations = async (EmployeeContract) => {
     const educationCount = await EmployeeContract?.methods
@@ -177,7 +176,7 @@ export default function EmployeePage() {
       return;
     });
     seteducations(neweducation);
-  }
+  };
 
   useEffect(() => {
     const func = async () => {
@@ -234,14 +233,14 @@ export default function EmployeePage() {
                 spacing={10}
               >
                 {skills.map((skill, index) => (
-                  <SkillCard skill={skill} key={index}  reqEndorsement={false}/>
+                  <SkillCard skill={skill} key={index} reqEndorsement={false} />
                 ))}
               </SimpleGrid>
             ) : (
               <Text>No Skills added.</Text>
             )}
           </Box>
-          
+
           <Box>
             <Text
               fontSize={{ base: "16px", lg: "18px" }}
@@ -259,7 +258,11 @@ export default function EmployeePage() {
                 spacing={10}
               >
                 {certifications.map((certi, index) => (
-                  <CertificationCard certi={certi} key={index} reqEndorsement={false}/>
+                  <CertificationCard
+                    certi={certi}
+                    key={index}
+                    reqEndorsement={false}
+                  />
                 ))}
               </SimpleGrid>
             ) : (
@@ -284,7 +287,7 @@ export default function EmployeePage() {
                 spacing={10}
               >
                 {workExps.map((w, index) => (
-                  <WorkExpCard workExp={w} key={index} reqEndorsement={false}/>
+                  <WorkExpCard workExp={w} key={index} reqEndorsement={false} />
                 ))}
               </SimpleGrid>
             ) : (
@@ -309,7 +312,7 @@ export default function EmployeePage() {
                 spacing={10}
               >
                 {educations.map((e, index) => (
-                  <EducationCard edu={e} key={index} reqEndorsement={false}/>
+                  <EducationCard edu={e} key={index} reqEndorsement={false} />
                 ))}
               </SimpleGrid>
             ) : (

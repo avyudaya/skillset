@@ -82,6 +82,17 @@ import {
         return;
       }
 
+      if(startDate > new Date().toJSON().slice(0, 10)){
+        toast({
+          title: "Start Date can't be later than today.",
+          status: "error",
+          isClosable: true,
+        });
+        setLoading(false);
+          setSubmitted(false);
+        return;
+      }
+
       if(startDate > endDate) {
         toast({
           title: "Start Date can't be earlier than End Date.",

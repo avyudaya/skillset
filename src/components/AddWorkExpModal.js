@@ -12,6 +12,7 @@ import {
     Button,
     FormErrorMessage,
     useToast,
+    Checkbox,
   } from "@chakra-ui/react";
   import { useEffect, useState } from "react";
   import Admin from "../abis/Admin.json";
@@ -23,6 +24,7 @@ import {
     const [orgAddress, setorgAddress] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [current, setCurrent] = useState(false);
     const [description, setDescription] = useState("");
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -54,6 +56,7 @@ import {
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
     const handleDescriptionChange = (e) => setDescription(e.target.value);
+    const handleCurrentChange = (e) => setCurrent(current => !current);
   
     var isAddress = function (address) {
       // function isAddress(address) {
@@ -78,14 +81,25 @@ import {
         isRoleError ||
         isOrgAddressError ||
         isStartDateErr ||
-        isEndDateErr ||
+        (isEndDateErr && !current) ||
         isDescriptionErr
       ) {
         setLoading(false);
         return;
       }
 
-      if(startDate > endDate) {
+      if(startDate > new Date().toJSON().slice(0, 10)){
+        toast({
+          title: "Start Date can't be later than today.",
+          status: "error",
+          isClosable: true,
+        });
+        setLoading(false);
+          setSubmitted(false);
+        return;
+      }
+
+      if(!current && startDate > endDate) {
         toast({
           title: "Start Date can't be earlier than End Date.",
           status: "error",
@@ -123,10 +137,11 @@ import {
   
         try {
           await EmployeeContract.methods
-            .addWorkExp(role, orgAddress, startDate, endDate, description)
+            .addWorkExp(role, orgAddress, startDate, endDate, current, description)
             .send({
               from: accounts[0],
             });
+          console.log(role, orgAddress, startDate, endDate, current, description)
           toast({
             title: "Work Experience saved succressfully!",
             status: "success",
@@ -268,7 +283,12 @@ import {
                 <FormErrorMessage>Start Date is required.</FormErrorMessage>
               )}
             </FormControl>
-            <FormControl isRequired isInvalid={isEndDateErr && submitted}>
+
+            <FormControl>
+                <Checkbox mt={4} mb={2} value={current} onChange={handleCurrentChange}>Currently Working Here</Checkbox>
+            </FormControl>
+
+            {!current && <FormControl isRequired isInvalid={isEndDateErr && submitted}>
               <FormLabel>End Date</FormLabel>
               <Input
                 placeholder="End Date"
@@ -279,8 +299,8 @@ import {
               {submitted && isEndDateErr && (
                 <FormErrorMessage>End Date is required.</FormErrorMessage>
               )}
-            </FormControl>
-  
+            </FormControl>}
+
             <FormControl
               mt={4}
               isRequired

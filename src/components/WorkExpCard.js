@@ -65,7 +65,7 @@ import { useState } from "react";
                 </Text>
               </CardBody>
             </Stack>
-            <Text>{workExp?.startdate} to {workExp?.enddate}</Text>
+            <Text>{workExp?.startdate} to {workExp?.enddate || "Current"}</Text>
           </Card>
         </Link>
   
@@ -88,7 +88,7 @@ import { useState } from "react";
               justifyContent="center"
               alignItems="start"
             >
-            <Text>{workExp?.startdate} to {workExp?.enddate}</Text>
+            <Text>{workExp?.startdate} to {workExp?.enddate || "Current"}</Text>
               <Text>{workExp?.description}</Text>
             </ModalBody>
   

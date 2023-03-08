@@ -180,6 +180,7 @@ contract Employee {
     string startdate;
     string enddate;
     bool endorsed;
+    bool current;
     string description;
   }
 
@@ -191,6 +192,7 @@ contract Employee {
     address _organization,
     string memory _startdate,
     string memory _enddate,
+    bool _current,
     string memory _description
   ) public OnlyEmployee {
     workexpInfo memory newworkexp;
@@ -200,6 +202,7 @@ contract Employee {
     newworkexp.enddate = _enddate;
     newworkexp.endorsed = false;
     newworkexp.description = _description;
+    newworkexp.current = _current;
     workexpmap[_organization] = newworkexp;
     workexps.push(_organization);
   }
@@ -218,6 +221,7 @@ contract Employee {
       string memory,
       string memory,
       bool,
+      bool,
       string memory
     )
   {
@@ -226,6 +230,7 @@ contract Employee {
       workexpmap[_organization].organization,
       workexpmap[_organization].startdate,
       workexpmap[_organization].enddate,
+      workexpmap[_organization].current,
       workexpmap[_organization].endorsed,
       workexpmap[_organization].description
     );
@@ -243,6 +248,7 @@ contract Employee {
       address,
       string memory,
       string memory,
+      bool,
       bool,
       string memory
     )

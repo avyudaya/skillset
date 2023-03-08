@@ -118,7 +118,7 @@ export const reqSkillEndorsementFunc = async (skill) => {
 
 
 export const reqWorkexpEndorsementFunc = async (workexp) => {
-  const { organization, role, startdate, enddate, description } = workexp;
+  const { organization, role, startdate, enddate, current, description } = workexp;
   const web3 = window.web3;
   const accounts = await web3.eth.getAccounts();
   var key;
@@ -139,6 +139,7 @@ export const reqWorkexpEndorsementFunc = async (workexp) => {
           organization,
           startdate,
           enddate,
+          current,
           role,
           ethAddress: accounts[0],
         },
