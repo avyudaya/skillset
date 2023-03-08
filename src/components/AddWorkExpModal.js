@@ -13,10 +13,11 @@ import {
     FormErrorMessage,
     useToast,
   } from "@chakra-ui/react";
-  import { useState } from "react";
+  import { useEffect, useState } from "react";
   import Admin from "../abis/Admin.json";
   import Employee from "../abis/Employee.json";
-  
+  import _ from "lodash";
+  const source = []
   export default function AddWorkExpModal({ initialRef, isOpen, onClose }) {
     const [role, setRole] = useState("");
     const [orgAddress, setorgAddress] = useState("");
@@ -26,6 +27,8 @@ import {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [invEth, setInvEth] = useState(false);
+  const [results, setResults] = useState([]);
+
   
     const isRoleError = role === "";
     const isOrgAddressError = orgAddress === "";
@@ -34,7 +37,20 @@ import {
     const isDescriptionErr = description === "";
   
     const handleRoleChange = (e) => setRole(e.target.value);
-    const handleOrgAddressChange = (e) => setorgAddress(e.target.value);
+    const handleOrgAddressChange = (e) => {
+      e.preventDefault();
+      setorgAddress(e.target.value);
+  
+      if (e.target.value < 1) {
+        setResults([]);
+        return;
+      }
+  
+      const re = new RegExp(_.escapeRegExp(orgAddress), "i");
+      const isMatch = (result) => re.test(result.title);
+  
+      setResults(_.filter(source, isMatch));
+    };
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
     const handleDescriptionChange = (e) => setDescription(e.target.value);
@@ -59,10 +75,10 @@ import {
       setLoading(true);
   
       if (
-        isRoleError &&
-        isOrgAddressError &&
-        isStartDateErr &&
-        isEndDateErr &&
+        isRoleError ||
+        isOrgAddressError ||
+        isStartDateErr ||
+        isEndDateErr ||
         isDescriptionErr
       ) {
         setLoading(false);
@@ -133,6 +149,41 @@ import {
       setSubmitted(false);
       onClose();
     };
+
+    useEffect(() => {
+      const func = async () => {
+        await loadBlockChainData();
+      };
+      func();
+    }, []);
+
+    const loadBlockChainData = async () => {
+      //load data for search of orgs
+      const web3 = window.web3;
+      const networkId = await web3.eth.net.getId();
+      const AdminData = await Admin.networks[networkId];
+  
+      if (AdminData) {
+        const admin = await new web3.eth.Contract(Admin.abi, AdminData.address);
+        const orgsCount = await admin?.methods?.OrganizationCount().call();
+  
+        // search logic organizations
+        const allOrgs = await Promise.all(
+          Array(parseInt(orgsCount))
+            .fill()
+            .map((ele, index) =>
+              admin.methods?.getOrganizationNameByIndex(index).call()
+            )
+        );
+        allOrgs.forEach(async (orgName, index) => {
+          const org = await admin?.methods?.getOrganizationByName(orgName).call();
+          source.push({
+            title: orgName,
+            description: org,
+          });
+        });
+      }
+    };
   
     return (
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={handleClose}>
@@ -161,12 +212,21 @@ import {
                 (isOrgAddressError && submitted) || (invEth && !submitted)
               }
             >
-              <FormLabel>Organization Address</FormLabel>
+              <FormLabel>Organization</FormLabel>
               <Input
-                placeholder="Organization from which you got the certification"
-                value={orgAddress}
-                onChange={handleOrgAddressChange}
-              />
+              placeholder="Organization from which you got the work Experience"
+              value={orgAddress}
+              onChange={handleOrgAddressChange}
+              list="orgsList"
+              autoComplete="off"
+            />
+            <datalist id="orgsList">
+              {results.map((org, index) => (
+                <option key={index} value={org.description}>
+                  {org.title}
+                </option>
+              ))}
+            </datalist>
               {submitted && isOrgAddressError && (
                 <FormErrorMessage>
                   Organization address is required.
@@ -175,7 +235,7 @@ import {
   
               {!submitted && invEth ? (
                 <FormErrorMessage>
-                  Invalid organization eth address.
+                  Invalid organization eth address. Select one from dropdown.
                 </FormErrorMessage>
               ) : (
                 <></>

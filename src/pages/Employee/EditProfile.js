@@ -245,7 +245,7 @@ import {
                 />
               </HStack>
   
-              <AddSkillModal initialRef={initialRef} isOpen={isOpen} onClose={onClose}/>
+              {isOpen && <AddSkillModal initialRef={initialRef} isOpen={isOpen} onClose={onClose}/>}
   
               {skills.length > 0 ? (
                 <SimpleGrid
@@ -281,7 +281,7 @@ import {
                 />
               </HStack>
   
-              <AddCertificationModal initialRef={initialRef} isOpen={isOpenCertification} onClose={onCloseCertification}/>
+              {isOpenCertification && <AddCertificationModal initialRef={initialRef} isOpen={isOpenCertification} onClose={onCloseCertification}/>}
   
               {certifications.length > 0 ? (
                 <SimpleGrid
@@ -316,7 +316,7 @@ import {
                 />
               </HStack>
   
-              <AddWorkExpModal initialRef={initialRef} isOpen={isOpenWorkExp} onClose={onCloseWorkExp}/>
+              {isOpenWorkExp && <AddWorkExpModal initialRef={initialRef} isOpen={isOpenWorkExp} onClose={onCloseWorkExp}/>}
   
               {workExps.length > 0 ? (
                 <SimpleGrid
@@ -351,7 +351,7 @@ import {
                 />
               </HStack>
   
-              <AddEducationModal initialRef={initialRef} isOpen={isOpenEducation} onClose={onCloseEducation}/>
+              {isOpenEducation && <AddEducationModal initialRef={initialRef} isOpen={isOpenEducation} onClose={onCloseEducation}/>}
   
               {educations.length > 0 ? (
                 <SimpleGrid

@@ -1,18 +1,13 @@
 import {
-    Card,
     useToast,
     Text,
-    CardBody,
-    CardHeader,
     Heading,
     LinkBox,
-    Box,
     LinkOverlay,
     Divider,
     Progress,
   } from "@chakra-ui/react";
   import { useEffect, useState } from "react";
-  import { useNavigate } from "react-router-dom";
   import Admin from "../abis/Admin.json";
   import Employee from "../abis/Employee.json";
 
@@ -70,7 +65,7 @@ import {
       loading? <Progress size='xs' isIndeterminate />:
       <LinkBox py={4} pb={0}>
         <Heading size="md" my="2">
-          <LinkOverlay href={'/employee/'+employeeData.ethAddress}>{employeeData.name}</LinkOverlay>
+          <LinkOverlay href={'/employee/'+employeeData.ethAddress}>{employeeData.name}: Employee</LinkOverlay>
         </Heading>
             <Text fontSize={"sm"} fontWeight={"300"}>
               {employeeData?.location}

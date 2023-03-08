@@ -13,10 +13,11 @@ import {
     FormErrorMessage,
     useToast,
   } from "@chakra-ui/react";
-  import { useState } from "react";
+  import { useEffect, useState } from "react";
   import Admin from "../abis/Admin.json";
   import Employee from "../abis/Employee.json";
-  
+  import _ from "lodash";
+  const source = []
   export default function AddEducationModal({ initialRef, isOpen, onClose }) {
 
     const [instAddress, setInstAddress] = useState("");
@@ -27,13 +28,27 @@ import {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [invEth, setInvEth] = useState(false);
+    const [results, setResults] = useState([]);
   
     const isInstAddressError = instAddress === "";
     const isStartDateErr = startDate === "";
     const isEndDateErr = endDate === "";
     const isDescriptionErr = description === "";
   
-    const handleInstAddressChange = (e) => setInstAddress(e.target.value);
+    const handleInstAddressChange = (e) => {
+      e.preventDefault();
+      setInstAddress(e.target.value);
+  
+      if (e.target.value < 1) {
+        setResults([]);
+        return;
+      }
+  
+      const re = new RegExp(_.escapeRegExp(instAddress), "i");
+      const isMatch = (result) => re.test(result.title);
+  
+      setResults(_.filter(source, isMatch));
+    };
     const handleStartDateChange = (e) => setStartDate(e.target.value);
     const handleEndDateChange = (e) => setEndDate(e.target.value);
     const handleDescriptionChange = (e) => setDescription(e.target.value);
@@ -58,9 +73,9 @@ import {
       setLoading(true);
   
       if (
-        isInstAddressError &&
-        isStartDateErr &&
-        isEndDateErr &&
+        isInstAddressError ||
+        isStartDateErr ||
+        isEndDateErr ||
         isDescriptionErr
       ) {
         setLoading(false);
@@ -130,6 +145,41 @@ import {
       setSubmitted(false);
       onClose();
     };
+
+    useEffect(() => {
+      const func = async () => {
+        await loadBlockChainData();
+      };
+      func();
+    }, []);
+
+    const loadBlockChainData = async () => {
+      //load data for search of orgs
+      const web3 = window.web3;
+      const networkId = await web3.eth.net.getId();
+      const AdminData = await Admin.networks[networkId];
+  
+      if (AdminData) {
+        const admin = await new web3.eth.Contract(Admin.abi, AdminData.address);
+        const orgsCount = await admin?.methods?.OrganizationCount().call();
+  
+        // search logic organizations
+        const allOrgs = await Promise.all(
+          Array(parseInt(orgsCount))
+            .fill()
+            .map((ele, index) =>
+              admin.methods?.getOrganizationNameByIndex(index).call()
+            )
+        );
+        allOrgs.forEach(async (orgName, index) => {
+          const org = await admin?.methods?.getOrganizationByName(orgName).call();
+          source.push({
+            title: orgName,
+            description: org,
+          });
+        });
+      }
+    };
   
     return (
       <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={handleClose}>
@@ -146,12 +196,21 @@ import {
                 (isInstAddressError && submitted) || (invEth && !submitted)
               }
             >
-              <FormLabel>Institution Address</FormLabel>
+              <FormLabel>Institution</FormLabel>
               <Input
                 placeholder="Institute from which you got the certification"
                 value={instAddress}
                 onChange={handleInstAddressChange}
+                autoComplete="off"
+                list='orgsList'
               />
+              <datalist id="orgsList">
+              {results.map((org, index) => (
+                <option key={index} value={org.description}>
+                  {org.title}
+                </option>
+              ))}
+            </datalist>
               {submitted && isInstAddressError && (
                 <FormErrorMessage>
                   Organization address is required.
@@ -160,7 +219,7 @@ import {
   
               {!submitted && invEth ? (
                 <FormErrorMessage>
-                  Invalid organization eth address.
+                  Invalid organization eth address. Select one from dropdown.
                 </FormErrorMessage>
               ) : (
                 <></>
