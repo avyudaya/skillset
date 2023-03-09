@@ -16,6 +16,7 @@ import { useState } from "react";
 import Admin from "../abis/Admin.json";
 import Employee from "../abis/Employee.json";
 import Organization from "../abis/Organization.json";
+import Skills from "../abis/Skills.json";
 
 export default function GetInfoModal({
   isOpen,
@@ -90,8 +91,9 @@ export default function GetInfoModal({
     const accounts = await web3.eth.getAccounts();
     const networkId = await web3.eth.net.getId();
     const AdminData = await Admin.networks[networkId];
+    const SkillData = await Skills.networks[networkId];
 
-    if (AdminData) {
+    if (AdminData && SkillData) {
       const admin = await new web3.eth.Contract(Admin.abi, AdminData.address);
 
       try {
@@ -121,7 +123,9 @@ export default function GetInfoModal({
               Organization.abi,
               orgContractAddress
             );
-            await orgContract?.methods?.addEmployees(sender).send({from: accounts[0]});
+            await orgContract?.methods
+              ?.addEmployees(sender)
+              .send({ from: accounts[0] });
             console.log("add to company");
           }
           await EmployeeContract?.methods
@@ -130,6 +134,13 @@ export default function GetInfoModal({
         } else if (section === 4) {
           await EmployeeContract?.methods
             ?.endorseSkill(info.name)
+            .send({ from: accounts[0] });
+          const skills = await new web3.eth.Contract(
+            Skills.abi,
+            SkillData.address
+          );
+          await skills?.methods
+            ?.addEmployeeToSkill(info.name, sender)
             .send({ from: accounts[0] });
         }
 
@@ -228,7 +239,9 @@ export default function GetInfoModal({
           <Text>Description: {info?.description}</Text>
           <Text>Role requested: Organization</Text>
           <Text>Location: {info?.location}</Text>
-          <Link href={'mailto:'+info?.email} color="teal.500">{info?.email}</Link>
+          <Link href={"mailto:" + info?.email} color="teal.500">
+            {info?.email}
+          </Link>
           <br></br>
           <Link
             isExternal

@@ -16,6 +16,7 @@ import {
 import { useEffect, useState } from "react";
 import Hotkeys from "react-hot-keys";
 import Admin from "../abis/Admin.json";
+import Skills from "../abis/Skills.json";
 import SearchEmp from "./SearchEmp";
 import SearchOrg from "./SearchOrg";
 
@@ -33,9 +34,11 @@ export default function Searchbar() {
     const web3 = window.web3;
     const networkId = await web3.eth.net.getId();
     const AdminData = await Admin.networks[networkId];
+    const SkillData = await Skills.networks[networkId];
 
-    if (AdminData) {
+    if (AdminData && SkillData) {
       const admin = await new web3.eth.Contract(Admin.abi, AdminData.address);
+      const skills = await new web3.eth.Contract(Skills.abi, SkillData.address);
       const empsCount = await admin?.methods?.employeeCount().call();
       const orgsCount = await admin?.methods?.OrganizationCount().call();
 
@@ -85,6 +88,44 @@ export default function Searchbar() {
     } else {
       toast({
         title: "The Admin Contract does not exist on this network!",
+        status: "error",
+        isClosable: true,
+      });
+    }
+
+
+    // searching skills
+
+    if (SkillData) {
+      const skills = await new web3.eth.Contract(Skills.abi, SkillData.address);
+      const skillLength = await skills?.methods?.getSkillLength().call();
+      const allSkills = await Promise.all(
+        Array(parseInt(skillLength))
+          .fill()
+          .map((ele, index) => skills.methods?.getSkillsByIndex(index).call())
+      );
+
+      allSkills.forEach(async (skillname) => {
+        const currSkillLen = await skills.methods
+          ?.getTotalEmployeeInSkillByName(skillname)
+          .call();
+        const allEmp = await Promise.all(
+          Array(parseInt(currSkillLen))
+            .fill()
+            .map((ele, index) =>
+              skills.methods?.getEmployeeBySkillName(skillname, index).call()
+            )
+        );
+        allEmp.forEach((emp, index) =>
+          source.push({
+            title: skillname,
+            description: <SearchEmp emp={emp} key={index} />,
+          })
+        );
+      });
+    } else {
+      toast({
+        title: "The Skill Contract does not exist on this network!",
         status: "error",
         isClosable: true,
       });
