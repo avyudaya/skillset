@@ -11,30 +11,42 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import validator from "validator";
 import { messageAdmin } from "../../firebase/api";
 import Admin from "../../abis/Admin.json";
 import axios from "axios";
 const JWT = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI1NDNiZWQ5Ni1hZTBmLTRlNjEtOTA2ZS00OGQxNmM3YTE0N2QiLCJlbWFpbCI6ImF2eXVkYXlhMUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiNTY5ZjNlM2ZjY2RkNjhkNzgyMTAiLCJzY29wZWRLZXlTZWNyZXQiOiIxOTgyYzM3NTdjNDhjOGY0MzFkNjg0ZDZkMTAzMjA3MGNiMWU3ZDkzNjI3MjBhODQ3M2QzMjY3YWQ3ZmI3YTc2IiwiaWF0IjoxNjc4MjY1OTMwfQ.hvE04O_JTWzQnleO7_JE5rl5Kjlt0--xzn64Jr7NrPs`;
 export default function Profile() {
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [role, setRole] = useState("0");
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedFile, setSelectedFile] = useState();
+  const [invalidEmail, setInvalidEmail] = useState(false);
 
   const isNameError = name === "";
   const isLocationError = location === "";
   const isDescriptionError = description === "";
   const isRoleError = role === "0";
   const isFileError = selectedFile === undefined;
+  const isEmailError = email === '';
+  var isEmail = (email) => {
+    if (validator.isEmail(email)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const handleNameChange = (e) => setName(e.target.value);
   const handleLocationChange = (e) => setLocation(e.target.value);
   const handleDescriptionChange = (e) => setDescription(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
   const handleRoleChange = (e) => {
-    if (e.target.value === "") setRole('1');
+    if (e.target.value === "") setRole("1");
     else setRole(e.target.value);
   };
 
@@ -86,8 +98,16 @@ export default function Profile() {
       isLocationError ||
       isDescriptionError ||
       isRoleError ||
-      (isFileError && role === '2')
+      isEmailError ||
+      (isFileError && role === "2")
     ) {
+      setLoading(false);
+      return;
+    }
+
+    if (!isEmail(email)) {
+      setInvalidEmail(true)
+      setSubmitted(false);
       setLoading(false);
       return;
     }
@@ -103,7 +123,7 @@ export default function Profile() {
 
         try {
           await admin.methods
-            .createEmployee(accounts[0], name, location, description)
+            .createEmployee(accounts[0], name, location, email, description)
             .send({ from: accounts[0] });
           window.location.reload(true);
         } catch (err) {
@@ -119,8 +139,9 @@ export default function Profile() {
       const info = {
         name: name,
         description: description,
+        email: email,
         location: location,
-        fileCID: fileCID
+        fileCID: fileCID,
       };
       await messageAdmin(info);
       toast({
@@ -173,6 +194,24 @@ export default function Profile() {
           )}
         </FormControl>
 
+        <FormControl isRequired isInvalid={(isEmailError && submitted) || (invalidEmail && !submitted)}>
+          <FormLabel mb={4}>Email Address</FormLabel>
+          <Input type="email" value={email} onChange={handleEmailChange} />
+          {submitted && isEmailError && (
+              <FormErrorMessage>
+                Email Address is required.
+              </FormErrorMessage>
+            )}
+
+            {!submitted && invalidEmail ? (
+              <FormErrorMessage>
+                Invalid Email address.
+              </FormErrorMessage>
+            ) : (
+              <></>
+            )}
+        </FormControl>
+
         <FormControl isRequired isInvalid={isRoleError && submitted}>
           <FormLabel>Role</FormLabel>
           <Select
@@ -213,13 +252,15 @@ export default function Profile() {
           )}
         </FormControl>
 
-        {role === "2" && <FormControl isRequired isInvalid={isFileError && submitted}>
-          <FormLabel mb={4}>Validation Document</FormLabel>
-          <Input type="file" onChange={changeHandler} />
-          {submitted && isFileError && (
+        {role === "2" && (
+          <FormControl isRequired isInvalid={isFileError && submitted}>
+            <FormLabel mb={4}>Validation Document</FormLabel>
+            <Input type="file" onChange={changeHandler} />
+            {submitted && isFileError && (
               <FormErrorMessage>File Required</FormErrorMessage>
             )}
-        </FormControl>}
+          </FormControl>
+        )}
       </VStack>
       <Button
         colorScheme="pink"

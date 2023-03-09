@@ -73,7 +73,7 @@ export default function GetOrg() {
     <Loading />
   ) : (
     <VStack spacing={2}>
-      {orgContractAddress && <OrganizationCard address={orgContractAddress} />}
+      {orgContractAddress && <OrganizationCard address={orgContractAddress} showLink={false} />}
       {employees.length > 0 && (
         <>
           <Heading

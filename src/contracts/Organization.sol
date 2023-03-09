@@ -7,19 +7,22 @@ contract Organization {
   address organization_address;
   string description;
   string location;
+  string email;
 
   constructor(
     address _admin,
     address _organization_address,
     string memory _name,
     string memory _description,
-    string memory _location
+    string memory _location,
+    string memory _email
   ) {
     admin = _admin;
     name = _name;
     organization_address = _organization_address;
     description = _description;
     location = _location;
+    email = _email;
   }
 
   function getOrganizationInfo()
@@ -29,10 +32,11 @@ contract Organization {
       string memory,
       address,
       string memory,
+      string memory,
       string memory
     )
   {
-    return (name, organization_address, description, location);
+    return (name, organization_address, description, location, email);
   }
 
   address[] allEmployees;

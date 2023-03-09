@@ -30,6 +30,7 @@ contract Admin {
         address _eth_address,
         string memory _name,
         string memory _location,
+        string memory _email,
         string memory _description
     ) public {
         Employee emp = new Employee(
@@ -37,7 +38,8 @@ contract Admin {
             _eth_address,
             _name,
             _description,
-            _location
+            _location,
+            _email
         );
         registeredEmployeesmap[_eth_address] = address(emp);
         registeredEmployees.push(_eth_address);
@@ -52,6 +54,7 @@ contract Admin {
         address _eth_address,
         string memory _name,
         string memory _location,
+        string memory _email,
         string memory _description
     ) public onlyOwner {
         Organization org = new Organization(
@@ -59,7 +62,8 @@ contract Admin {
             _eth_address,
             _name,
             _description,
-            _location
+            _location,
+            _email
         );
         registeredOrganizationmap[_eth_address] = address(org);
         registeredOrganization.push(_eth_address);

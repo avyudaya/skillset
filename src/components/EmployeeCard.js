@@ -39,6 +39,7 @@ import {
         name: employeedata[1],
         location: employeedata[3],
         description: employeedata[2],
+        email: employeedata[4]
       };
       setEmployeeData(newEmployedata);
       setLoading(false);
@@ -50,7 +51,7 @@ import {
         Array(parseInt(skillCount))
           .fill()
           .map((ele, index) =>
-            EmployeeContract?.methods?.getSkillByIndex(index).call()
+            EmployeeContract?.methods?.getskillByIndex(index).call()
           )
       );
   
@@ -174,6 +175,7 @@ import {
           <Stack divider={<StackDivider />} spacing="4">
             <Box>
               <Heading size="xs">Location: {employeeData?.location}</Heading>
+              <Heading size="xs">Email: {employeeData?.email}</Heading>
               <Text pt="2" fontSize="sm">
                 {employeeData?.description}
               </Text>
@@ -184,6 +186,7 @@ import {
                 <Stack direction="row">
                   {
                     skills.map((skill, index) => (
+                      skill.endorsed? <Badge key={index} variant='solid' colorScheme='green'>{skill?.name}</Badge>:
                       <Badge key={index}>{skill?.name}</Badge>
                     ))
                   }
@@ -196,6 +199,7 @@ import {
                 <Stack direction="row">
                   {
                     certifications.map((certi, index) => (
+                      certi.endorsed? <Badge key={index} variant='solid' colorScheme='green'>{certi?.name}</Badge>:
                       <Badge key={index}>{certi?.name}</Badge>
                     ))
                   }
@@ -208,6 +212,7 @@ import {
                 <Stack direction="row">
                   {
                     workExps.map((w, index) => (
+                      w.endorsed? <Badge key={index} variant='solid' colorScheme='green'>{w?.role}</Badge>:
                       <Badge key={index}>{w?.role}</Badge>
                     ))
                   }
@@ -220,6 +225,7 @@ import {
                 <Stack direction="row">
                   {
                     educations.map((edu, index) => (
+                      edu.endorsed? <Badge key={index} variant='solid' colorScheme='green'>{edu?.description}</Badge>:
                       <Badge key={index}>{edu?.description}</Badge>
                     ))
                   }

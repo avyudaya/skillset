@@ -58,10 +58,9 @@ export default function EmployeePage() {
       const newEmployedata = {
         ethAddress: employeedata[0],
         name: employeedata[1],
-        location: employeedata[2],
-        description: employeedata[3],
-        overallEndorsement: employeedata[4],
-        endorsecount: employeedata[5],
+        location: employeedata[3],
+        description: employeedata[2],
+        email: employeedata[4],
       };
 
       setEmployeeData(newEmployedata);
@@ -205,6 +204,9 @@ export default function EmployeePage() {
           </Text>
           <Text fontSize={"2xl"} fontWeight={"300"} mb={3}>
             {employeeData?.location}
+          </Text>
+          <Text fontSize={"2xl"} fontWeight={"300"} mb={3}>
+            {employeeData?.email}
           </Text>
 
           <Text fontSize={"lg"}>{employeeData?.description}</Text>

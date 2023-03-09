@@ -32,7 +32,7 @@ export default function GetInfoModal({
 
   const createUser = async (e) => {
     e.preventDefault();
-    const { ethAddress, name, location, description } = info;
+    const { ethAddress, name, location, description, email } = info;
     if (!name || !location || !description || !ethAddress) {
       toast({
         title: "Please fill all the fields!",
@@ -59,7 +59,7 @@ export default function GetInfoModal({
       }
       try {
         await admin.methods
-          .createOrganization(ethAddress, name, location, description)
+          .createOrganization(ethAddress, name, location, email, description)
           .send({ from: accounts[0] });
         // TODO delete the chat form firebase
         toast({
@@ -228,6 +228,8 @@ export default function GetInfoModal({
           <Text>Description: {info?.description}</Text>
           <Text>Role requested: Organization</Text>
           <Text>Location: {info?.location}</Text>
+          <Link href={'mailto:'+info?.email} color="teal.500">{info?.email}</Link>
+          <br></br>
           <Link
             isExternal
             color="teal.500"

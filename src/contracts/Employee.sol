@@ -7,19 +7,22 @@ contract Employee {
   string description;
   string location;
   string name;
+  string email;
 
   constructor(
     address _admin,
     address _employee_address,
     string memory _name,
     string memory _description,
-    string memory _location
+    string memory _location,
+    string memory _email
   ) {
     admin = _admin;
     name = _name;
     employee_address = _employee_address;
     description = _description;
     location = _location;
+    email = _email;
   }
 
   modifier OnlyEmployee() {
@@ -34,10 +37,11 @@ contract Employee {
       address,
       string memory,
       string memory,
+      string memory,
       string memory
     )
   {
-    return (employee_address, name, description, location);
+    return (employee_address, name, description, location, email);
   }
 
    /*********************************************************SKILL SECTION**********************************************************/

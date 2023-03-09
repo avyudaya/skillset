@@ -62,7 +62,7 @@ export default function AllOrganizations() {
         justifyContent="center"
       >
         {organizations.map((organization, index) => (
-          <OrganizationCard key={index} address={organization} />
+          <OrganizationCard key={index} address={organization} showLink={true}/>
         ))}
       </SimpleGrid>: <Text>No organizations registered in the blockchain.</Text>}
     </VStack>

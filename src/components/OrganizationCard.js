@@ -9,9 +9,10 @@ import {
     Stack,
     StackDivider,
     Text,
+    Link
   } from "@chakra-ui/react";
 import Loading from "./Loading";
-export default function OrganizationCard({address}){
+export default function OrganizationCard({address, showLink}){
 
     const [orgData, setOrgData] = useState([]);
     const [allEmployees, setAllEmployees] = useState([])
@@ -30,6 +31,7 @@ export default function OrganizationCard({address}){
             name: organizationData[0],
             location: organizationData[3],
             description: organizationData[2],
+            email: organizationData[4]
         };
         setOrgData(newOrgData);
 
@@ -57,7 +59,16 @@ export default function OrganizationCard({address}){
 
     return (
     <Card width={{ base: "sm", md: "2xl", sm: "md", lg: "3xl" }}>
-      <CardHeader pb={0}>
+      {
+        showLink ? <Link href={'/organization/'+orgData?.ethAddress}> <CardHeader pb={0}>
+        <Heading size="md">
+          {orgData?.name}
+        </Heading>
+        <Text>
+        {orgData?.ethAddress}  
+        </Text>
+      </CardHeader></Link>: 
+       <CardHeader pb={0}>
         <Heading size="md">
           {orgData?.name}
         </Heading>
@@ -65,11 +76,14 @@ export default function OrganizationCard({address}){
         {orgData?.ethAddress}  
         </Text>
       </CardHeader>
+      }
+      
 
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
           <Box>
             <Heading size="xs">Location: {orgData?.location}</Heading>
+            <Heading size="xs">Email: {orgData?.email}</Heading>
             <Text pt="2" fontSize="sm">
               {orgData?.description}
             </Text>

@@ -54,6 +54,7 @@ export default function GetEmp() {
       name: employeedata[1],
       location: employeedata[3],
       description: employeedata[2],
+      email: employeedata[4]
     };
 
     setEmployeeData(newEmployedata);
@@ -189,6 +190,9 @@ export default function GetEmp() {
           </Text>
           <Text fontSize={"2xl"} fontWeight={"300"} mb={3}>
             {employeeData?.location}
+          </Text>
+          <Text fontSize={"2xl"} fontWeight={"300"} mb={3}>
+            {employeeData?.email}
           </Text>
 
           <Text fontSize={"lg"}>{employeeData?.description}</Text>
