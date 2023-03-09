@@ -33,6 +33,7 @@ contract Admin {
         string memory _email,
         string memory _description
     ) public {
+
         Employee emp = new Employee(
             owner,
             _eth_address,
@@ -57,6 +58,7 @@ contract Admin {
         string memory _email,
         string memory _description
     ) public onlyOwner {
+        require(registeredOrganizationmap[_eth_address] == address(0x0), "Already registered");
         Organization org = new Organization(
             owner,
             _eth_address,

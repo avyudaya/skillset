@@ -88,7 +88,7 @@ import { useState } from "react";
               justifyContent="center"
               alignItems="start"
             >
-            <Text>{workExp?.startdate} to {workExp?.enddate || "Current"}</Text>
+            <Text>{workExp?.startdate} to {workExp?.enddate === '' ? "Current": workExp?.enddate }</Text>
               <Text>{workExp?.description}</Text>
             </ModalBody>
   

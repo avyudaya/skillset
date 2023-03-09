@@ -63,7 +63,9 @@ export default function Searchbar() {
         );
         allEmp.forEach((emp, index) => {
           source.push({
+            address: emp,
             title: empName,
+            skill: '',
             description: <SearchEmp emp={emp} key={index} />,
           });
         });
@@ -80,7 +82,9 @@ export default function Searchbar() {
       allOrgs.forEach(async (orgName, index) => {
         const org = await admin?.methods?.getOrganizationByName(orgName).call();
         source.push({
+          address: org,
           tittle: orgName,
+          skill: '',
           description: <SearchOrg org={org} key={index} />,
         });
       });
@@ -116,12 +120,11 @@ export default function Searchbar() {
               skills.methods?.getEmployeeBySkillName(skillname, index).call()
             )
         );
-        allEmp.forEach((emp, index) =>
-          source.push({
-            title: skillname,
-            description: <SearchEmp emp={emp} key={index} />,
-          })
-        );
+
+        if(source.filter(e => e.address === allEmp[0]).length){
+          var i = source.findIndex(x => x.address === allEmp[0])
+          source[i].skill += skillname+" ";
+        }
       });
     } else {
       toast({
@@ -130,6 +133,8 @@ export default function Searchbar() {
         isClosable: true,
       });
     }
+
+    console.log(source);
   };
 
   const handleSearchChange = (e) => {
@@ -143,7 +148,7 @@ export default function Searchbar() {
     }
 
     const re = new RegExp(_.escapeRegExp(value), "i");
-    const isMatch = (result) => re.test(result.title);
+    const isMatch = (result) => re.test(result.skill) || re.test(result.title);
 
     setLoading(false);
     setResults(_.filter(source, isMatch));

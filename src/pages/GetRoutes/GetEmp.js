@@ -67,7 +67,7 @@ export default function GetEmp() {
       Array(parseInt(skillCount))
         .fill()
         .map((ele, index) =>
-          EmployeeContract?.methods?.getSkillByIndex(index).call()
+          EmployeeContract?.methods?.getskillByIndex(index).call()
         )
     );
 

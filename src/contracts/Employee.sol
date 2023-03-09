@@ -199,14 +199,20 @@ contract Employee {
     bool _current,
     string memory _description
   ) public OnlyEmployee {
+    require(workexpmap[_organization].organization != _organization, "Already Exists");
     workexpInfo memory newworkexp;
     newworkexp.role = _role;
     newworkexp.organization = _organization;
     newworkexp.startdate = _startdate;
-    newworkexp.enddate = _enddate;
     newworkexp.endorsed = false;
     newworkexp.description = _description;
-    newworkexp.current = _current;
+    if (_current==true){
+      newworkexp.current = _current;
+      newworkexp.enddate = '';
+    } else {
+      newworkexp.enddate = _enddate;
+      newworkexp.current = false;
+    }
     workexpmap[_organization] = newworkexp;
     workexps.push(_organization);
   }

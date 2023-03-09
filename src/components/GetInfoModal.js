@@ -17,6 +17,7 @@ import Admin from "../abis/Admin.json";
 import Employee from "../abis/Employee.json";
 import Organization from "../abis/Organization.json";
 import Skills from "../abis/Skills.json";
+import { db } from "../firebase/firebase";
 
 export default function GetInfoModal({
   isOpen,
@@ -116,7 +117,8 @@ export default function GetInfoModal({
         } else if (section === 3) {
           if (info?.current === true) {
             // add it to the organization companies
-            const orgContractAddress = await admin?.methods
+            try {
+              const orgContractAddress = await admin?.methods
               ?.getOrganizationContractByAddress(info.organization)
               .call();
             const orgContract = await new web3.eth.Contract(
@@ -127,6 +129,14 @@ export default function GetInfoModal({
               ?.addEmployees(sender)
               .send({ from: accounts[0] });
             console.log("add to company");
+            } catch (e){
+              toast({
+                title: e.message,
+                status: "error",
+                isClosable: true,
+              });
+              return;
+            }
           }
           await EmployeeContract?.methods
             ?.endorseWorkExp()

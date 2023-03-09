@@ -4,8 +4,6 @@ import {
     Modal,
     Text,
     CardBody,
-    CircularProgress,
-    CircularProgressLabel,
     useDisclosure,
     ModalOverlay,
     ModalContent,
@@ -14,8 +12,6 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    CardFooter,
-    HStack,
     useToast,
   } from "@chakra-ui/react";
   import { CheckCircleIcon } from "@chakra-ui/icons";
